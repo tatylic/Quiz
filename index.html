@@ -1,12 +1,133 @@
-  <title>Phần mềm thi trắc nghiệm</title>
-  
-,, ,.
-``
-
-  <h1>Phần mềm thi trắc nghiệm</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Something to do</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f4f4f4;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    #numQuestions, button {
+      padding: 10px;
+      margin: 5px;
+      font-size: 16px;
+    }
+    button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    #quizContainer {
+      margin-top: 20px;
+    }
+    .question {
+      margin-bottom: 20px;
+      padding: 15px;
+      background-color: white;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>Things you want to do</h1>
   <label for="numQuestions">Số lượng câu hỏi:</label>
-  <input value="5" max="10" min="1" id="numQuestions" type="number">
-  <button>Bắt đầu thi</button>
-onclick="startQuiz()"
+  <input type="number" id="numQuestions" min="1" max="10" value="5">
+  <button onclick="startQuiz()">Bắt đầu thi</button>
   <div id="quizContainer"></div>
   <div id="result"></div>
+
+  <script>
+    function generateQuestion() {
+      // Generate a simple math question (e.g., a + b = ?)
+      const num1 = Math.floor(Math.random() * 50) + 1;
+      const num2 = Math.floor(Math.random() * 50) + 1;
+      const correctAnswer = num1 + num2;
+      const answers = [
+        correctAnswer,
+        correctAnswer + Math.floor(Math.random() * 10) + 1,
+        correctAnswer - Math.floor(Math.random() * 10) - 1,
+        correctAnswer + Math.floor(Math.random() * 20) - 10
+      ].sort(() => Math.random() - 0.5); // Shuffle answers
+
+      return {
+        question: `What is ${num1} + ${num2}?`,
+        answers: answers,
+        correctAnswer: correctAnswer
+      };
+    }
+
+    function startQuiz() {
+      const numQuestions = parseInt(document.getElementById('numQuestions').value);
+      if (numQuestions < 1 || numQuestions > 10) {
+        alert('Please enter a number between 1 and 10.');
+        return;
+      }
+
+      const quizContainer = document.getElementById('quizContainer');
+      quizContainer.innerHTML = ''; // Clear previous quiz
+      document.getElementById('result').innerHTML = ''; // Clear previous result
+
+      const questions = [];
+      for (let i = 0; i < numQuestions; i++) {
+        questions.push(generateQuestion());
+      }
+
+      questions.forEach((q, index) => {
+        const questionDiv = document.createElement('div');
+        questionDiv.className = 'question';
+        questionDiv.innerHTML = `<strong>Question ${index + 1}: ${q.question}</strong><br>`;
+        
+        q.answers.forEach((answer, ansIndex) => {
+          const label = document.createElement('label');
+          label.innerHTML = `
+            <input type="radio" name="question${index}" value="${answer}" required>
+            ${answer}<br>
+          `;
+          questionDiv.appendChild(label);
+        });
+        quizContainer.appendChild(questionDiv);
+      });
+
+      // Add submit button
+      const submitButton = document.createElement('button');
+      submitButton.textContent = 'Submit Quiz';
+      submitButton.onclick = () => submitQuiz(questions);
+      quizContainer.appendChild(submitButton);
+    }
+
+    function submitQuiz(questions) {
+      let score = 0;
+      questions.forEach((q, index) => {
+        const selectedAnswer = document.querySelector(`input[name="question${index}"]:checked`);
+        if (selectedAnswer && parseInt(selectedAnswer.value) === q.correctAnswer) {
+          score++;
+        }
+      });
+
+      const resultDiv = document.getElementById('result');
+      resultDiv.innerHTML = `You scored ${score} out of ${questions.length}!`;
+    }
+  </script>
+</body>
+</html>

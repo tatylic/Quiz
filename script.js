@@ -113,3 +113,11 @@ function submitQuiz() {
   });
   document.getElementById('result').innerHTML = `Bạn đúng ${score}/${selectedQuestions.length} câu!`;
 }
+// ... (toàn bộ code như đã gửi ở trên)
+
+window.startQuiz = startQuiz;
+window.selectAnswer = selectAnswer;
+window.submitQuiz = submitQuiz;
+window.startQuiz = startQuiz;
+window.selectAnswer = selectAnswer;
+window.submitQuiz = submitQuiz;

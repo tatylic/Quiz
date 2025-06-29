@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Something to do</title>
+  <link rel="stylesheet" href="style.css">
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -57,77 +58,6 @@
   <div id="quizContainer"></div>
   <div id="result"></div>
 
-  <script>
-    function generateQuestion() {
-      // Generate a simple math question (e.g., a + b = ?)
-      const num1 = Math.floor(Math.random() * 50) + 1;
-      const num2 = Math.floor(Math.random() * 50) + 1;
-      const correctAnswer = num1 + num2;
-      const answers = [
-        correctAnswer,
-        correctAnswer + Math.floor(Math.random() * 10) + 1,
-        correctAnswer - Math.floor(Math.random() * 10) - 1,
-        correctAnswer + Math.floor(Math.random() * 20) - 10
-      ].sort(() => Math.random() - 0.5); // Shuffle answers
-
-      return {
-        question: `What is ${num1} + ${num2}?`,
-        answers: answers,
-        correctAnswer: correctAnswer
-      };
-    }
-
-    function startQuiz() {
-      const numQuestions = parseInt(document.getElementById('numQuestions').value);
-      if (numQuestions < 1 || numQuestions > 10) {
-        alert('Please enter a number between 1 and 10.');
-        return;
-      }
-
-      const quizContainer = document.getElementById('quizContainer');
-      quizContainer.innerHTML = ''; // Clear previous quiz
-      document.getElementById('result').innerHTML = ''; // Clear previous result
-
-      const questions = [];
-      for (let i = 0; i < numQuestions; i++) {
-        questions.push(generateQuestion());
-      }
-
-      questions.forEach((q, index) => {
-        const questionDiv = document.createElement('div');
-        questionDiv.className = 'question';
-        questionDiv.innerHTML = `<strong>Question ${index + 1}: ${q.question}</strong><br>`;
-        
-        q.answers.forEach((answer, ansIndex) => {
-          const label = document.createElement('label');
-          label.innerHTML = `
-            <input type="radio" name="question${index}" value="${answer}" required>
-            ${answer}<br>
-          `;
-          questionDiv.appendChild(label);
-        });
-        quizContainer.appendChild(questionDiv);
-      });
-
-      // Add submit button
-      const submitButton = document.createElement('button');
-      submitButton.textContent = 'Submit Quiz';
-      submitButton.onclick = () => submitQuiz(questions);
-      quizContainer.appendChild(submitButton);
-    }
-
-    function submitQuiz(questions) {
-      let score = 0;
-      questions.forEach((q, index) => {
-        const selectedAnswer = document.querySelector(`input[name="question${index}"]:checked`);
-        if (selectedAnswer && parseInt(selectedAnswer.value) === q.correctAnswer) {
-          score++;
-        }
-      });
-
-      const resultDiv = document.getElementById('result');
-      resultDiv.innerHTML = `You scored ${score} out of ${questions.length}!`;
-    }
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
